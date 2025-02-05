@@ -3,11 +3,27 @@ import re
 from openpyxl import load_workbook
 from openpyxl.styles import NamedStyle
 
-# Directorios de los archivos de texto
-base_directory = os.path.dirname(__file__)
-txt_directory = os.path.join(base_directory, "FINAMERIS", "txts")
-# Ruta del archivo Excel de salida
-excel_path = os.path.join(base_directory, "excel banco", "prueba.xlsx")
+
+# Obtener el directorio del escritorio del usuario
+desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+
+# Verificar si existe una carpeta llamada "practicante" en el escritorio
+practicante_dir = os.path.join(desktop, "practicante")
+if os.path.exists(practicante_dir):
+    script_dir = practicante_dir
+else:
+    script_dir = desktop
+
+# Directorios de los archivos de texto (relativos al directorio del script)
+txt_directory = os.path.join(script_dir, "FINAMERIS", "txts")
+# Ruta del archivo Excel de salida (relativa al directorio del script)
+excel_path = os.path.join(script_dir, "excel banco", "banco.xlsx")
+
+# Crear los directorios si no existen
+if not os.path.exists(txt_directory):
+    os.makedirs(txt_directory)
+if not os.path.exists(os.path.dirname(excel_path)):
+    os.makedirs(os.path.dirname(excel_path))
 
 # Diccionario para almacenar los datos y mapear las columnas
 data_keys = {

@@ -1,21 +1,22 @@
 import os
 import re
-import sys
 from openpyxl import load_workbook
 from openpyxl.utils import FORMULAE
 
-# Directorio del script
-if getattr(sys, 'frozen', False):
-    # Si se está ejecutando como un ejecutable
-    script_dir = sys._MEIPASS
+# Obtener el directorio del escritorio del usuario
+desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+
+# Verificar si existe una carpeta llamada "practicante" en el escritorio
+practicante_dir = os.path.join(desktop, "practicante")
+if os.path.exists(practicante_dir):
+    script_dir = practicante_dir
 else:
-    # Si se está ejecutando como un script normal
-    script_dir = os.path.dirname(os.path.abspath(__file__))
+    script_dir = desktop
 
 # Directorios de los archivos de texto (relativos al directorio del script)
 txt_directory = os.path.join(script_dir, "CORDADA", "txts")
 # Ruta del archivo Excel de salida (relativa al directorio del script)
-excel_path = os.path.join(script_dir, "excel banco", "prueba.xlsx")
+excel_path = os.path.join(script_dir, "excel banco", "banco.xlsx")
 
 # Crear los directorios si no existen
 if not os.path.exists(txt_directory):

@@ -3,13 +3,20 @@ import re
 from openpyxl import load_workbook
 from openpyxl.utils import FORMULAE
 
-# Directorio del script
-script_dir = os.path.dirname(__file__)
+# Obtener el directorio del escritorio del usuario
+desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+
+# Verificar si existe una carpeta llamada "practicante" en el escritorio
+practicante_dir = os.path.join(desktop, "practicante")
+if os.path.exists(practicante_dir):
+    script_dir = practicante_dir
+else:
+    script_dir = desktop
 
 # Directorios de los archivos de texto (relativos al directorio del script)
 txt_directory = os.path.join(script_dir, "LATAM", "txts")
 # Ruta del archivo Excel de salida (relativa al directorio del script)
-excel_path = os.path.join(script_dir, "excel banco", "prueba.xlsx")
+excel_path = os.path.join(script_dir, "excel banco", "banco.xlsx")
 
 # Crear los directorios si no existen
 if not os.path.exists(txt_directory):
@@ -41,7 +48,14 @@ def extract_data(file_path):
         else:
             pattern = rf"{key}:\s*(-?\$[\d.,]+)"
         match = re.search(pattern, content)
-        extracted_data[key] = match.group(1) if match else None
+        if match:
+            value = match.group(1)
+            # Convertir valores negativos a positivos
+            if value.startswith('-'):
+                value = value[1:]
+            extracted_data[key] = value
+        else:
+            extracted_data[key] = None
     return extracted_data
 
 # Cargar el archivo Excel existente

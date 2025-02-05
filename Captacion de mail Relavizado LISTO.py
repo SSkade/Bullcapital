@@ -8,8 +8,15 @@ inbox = outlook.GetDefaultFolder(6)  # 6 corresponde a la bandeja de entrada
 # Subcarpetas a buscar dentro de la bandeja de entrada
 subfolders = ["CORDADA", "LATAM"]
 
-# Directorio donde se guardarán los archivos adjuntos (relativo al directorio del script)
-script_dir = os.path.dirname(__file__)
+# Obtener el directorio del escritorio del usuario
+desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+
+# Verificar si existe una carpeta llamada "practicante" en el escritorio
+practicante_dir = os.path.join(desktop, "practicante")
+if os.path.exists(practicante_dir):
+    script_dir = practicante_dir
+else:
+    script_dir = desktop
 
 # Crear las carpetas "CORDADA" y "LATAM" si no existen
 for subfolder_name in subfolders:
